@@ -83,6 +83,17 @@ describe("public staging sanitization", () => {
     expect(instructionFiles).toEqual(["CLAUDE.md"]);
   });
 
+  it("does not include legacy private-source prompt filenames", () => {
+    const legacyFiles = walk(ROOT).filter((file) =>
+      path.basename(file).toLowerCase().includes(phrase(["horm", "ozi"])),
+    );
+
+    expect(legacyFiles).toEqual([]);
+    expect(
+      fs.existsSync(path.join(ROOT, "lib/prompts/core/copywriting-techniques.ts")),
+    ).toBe(true);
+  });
+
   it("does not contain private identifiers or domain-specific client defaults", () => {
     const forbidden = [
       phrase(["mor", "gan"]),

@@ -123,6 +123,8 @@ The staged public directory must not include:
   is intentionally public runtime policy for future coding agents; do not add
   private or nested instruction files.
 - Copyrighted reference source material.
+- Legacy private-source prompt filenames. The public technique file is
+  `lib/prompts/core/copywriting-techniques.ts`.
 
 The public test suite includes a filesystem sanitization test that checks for excluded directory names, private identifier patterns, and non-placeholder environment values.
 
@@ -155,6 +157,7 @@ Recommended final gate before copying:
 ```bash
 rg -in "private|secret|real-client|copyright-source" .
 find . -path "./CLAUDE.md" -prune -o \( -name "CLAUDE.md" -o -name "AGENTS.md" -o -name ".env.local" \) -print
+test -z "$(find lib/prompts/core -name '*-techniques.ts' ! -name 'copywriting-techniques.ts' -print -quit)"
 npm run test:public
 npm run build
 ```
