@@ -71,6 +71,18 @@ describe("public staging sanitization", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("only includes the public root runtime policy file", () => {
+    const instructionFiles = walk(ROOT)
+      .map((file) => path.relative(ROOT, file))
+      .filter((file) => {
+        const name = path.basename(file);
+        return name === "CLAUDE.md" || name === "AGENTS.md";
+      })
+      .sort();
+
+    expect(instructionFiles).toEqual(["CLAUDE.md"]);
+  });
+
   it("does not contain private identifiers or domain-specific client defaults", () => {
     const forbidden = [
       phrase(["mor", "gan"]),

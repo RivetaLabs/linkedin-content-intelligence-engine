@@ -119,7 +119,9 @@ The staged public directory must not include:
 - Real application passwords or API keys.
 - Scraped personal data exports.
 - Local build artifacts.
-- Private agent instructions or internal handoff files.
+- Private agent instructions or internal handoff files. The root `CLAUDE.md`
+  is intentionally public runtime policy for future coding agents; do not add
+  private or nested instruction files.
 - Copyrighted reference source material.
 
 The public test suite includes a filesystem sanitization test that checks for excluded directory names, private identifier patterns, and non-placeholder environment values.
@@ -152,7 +154,7 @@ Recommended final gate before copying:
 
 ```bash
 rg -in "private|secret|real-client|copyright-source" .
-find . -name "CLAUDE.md" -o -name "AGENTS.md" -o -name ".env.local"
+find . -path "./CLAUDE.md" -prune -o \( -name "CLAUDE.md" -o -name "AGENTS.md" -o -name ".env.local" \) -print
 npm run test:public
 npm run build
 ```
